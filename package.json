@@ -1,6 +1,6 @@
 {
   "name": "plain-music.js",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "A Javascript parser/generator library for Plain Music",
   "main": "index.js",
   "scripts": {
