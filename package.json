@@ -2,7 +2,7 @@
   "name": "plain-music.js",
   "version": "0.0.1",
   "description": "A Javascript parser/generator library for Plain Music",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "scripts": {
     "watch": "gulp dev",
     "build": "gulp build"
