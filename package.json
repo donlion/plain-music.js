@@ -1,12 +1,8 @@
 {
-  "name": "plain-music.js",
+  "name": "plain-music-js",
   "version": "0.0.1",
-  "description": "A Javascript parser/generator library for Plain Music",
-  "main": "./dist/index.js",
-  "scripts": {
-    "watch": "gulp dev",
-    "build": "gulp build"
-  },
+  "description": "A Javascript library for handling Plain Music",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/PelleJuul/plain-music.js.git"
@@ -25,14 +21,9 @@
   },
   "homepage": "https://github.com/PelleJuul/plain-music.js#readme",
   "devDependencies": {
-    "babel-core": "^6.24.0",
-    "babel-preset-es2015": "^6.24.0",
-    "babel-preset-stage-0": "^6.22.0",
-    "del": "^2.2.2",
-    "gulp": "^3.9.1",
-    "gulp-babel": "^6.1.2",
-    "gulp-concat": "^2.6.1",
-    "gulp-uglify": "^2.1.0",
-    "run-sequence": "^1.2.2"
+    "mocha": "^3.2.0",
+    "parleur-js": "^1.0.0",
+    "uglify-js": "^2.8.13",
+    "webpack": "^2.2.1"
   }
 }
