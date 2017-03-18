@@ -1,5 +1,6 @@
 var Parleur = require('parleur-js');
 
+// Parses a single plain music note, like 'c', 'c++' and 'csl^_+-.!*~'.
 parsePlainMusic = function(text) {
   var parser = new Parleur.Parser(text);
 
