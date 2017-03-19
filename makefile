@@ -15,6 +15,9 @@ $(packed): $(sources) $(distdir)
 $(distdir):
 	mkdir $(distdir)
 
+sketch:
+	./node_modules/webpack/bin/webpack.js sketch
+
 .PHONY: clean publish test
 
 publish: distributable

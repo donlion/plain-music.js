@@ -1,21 +1,21 @@
 var Parleur = require('parleur-js');
 
 // Parses a single plain music note, like 'c', 'c++' and 'csl^_+-.!*~'.
-parsePlainMusic = function(text) {
+module.exports.parseFile = function(text) {
   var parser = new Parleur.Parser(text);
 
-  var result = stave(parser);
+  var result = parser.many(stave);
   parser.end();
 
   if (parser.success()) {
     return {
       error: undefined,
-      result: result };
+      value: result };
   }
 
   return { 
     error: parser.errorMessage(),
-    result: undefined
+    value: undefined
   }
 };
 
@@ -28,7 +28,48 @@ function white(parser) {
 }
 
 function stave(parser) {
+  return parser.oneOf([multiVoiceStave, singleVoiceStave]);
+}
+
+function singleVoiceStave(parser) {
+  if (parser.failure()) return undefined;
+
+  var voiceA = voice(parser);
+
+  if (parser.success()) {
+    return {
+      whitespace: '',
+      voices: [voiceA],
+      endWhitespace: ''
+    };
+  }
+
+  return undefined;
+}
+
+function multiVoiceStave(parser) {
   if (parser.failure()) return;
+
+  var whitespace = white(parser);
+  parser.string("{");
+  var voices = parser.many(voice);
+  parser.string("}");
+  var endWhitespace = white(parser);
+
+  if (parser.success()) {
+    return {
+      whitespace: whitespace,
+      voices: voices,
+      endWhitespace: endWhitespace
+    };
+  }
+
+  parser.fail("Expected stave");
+  return undefined;
+}
+
+function voice(parser) {
+  if (parser.failure()) return undefined;
 
   var whitespace = white(parser);
   parser.string("{");
@@ -44,7 +85,6 @@ function stave(parser) {
     };
   }
 
-  parser.fail("Expected stave");
   return undefined;
 }
 
@@ -53,18 +93,26 @@ function unit(parser) {
 }
 
 function note(parser) {
+  if (parser.failure()) return undefined;
+
   var whitespace = whiteAndBarline(parser);
+
   var pitch = parser.regex('[abcdefg]');
-  var sharp = parser.regex("s*");
-  var low = parser.regex("l*");;
+
+  var sharp = parser.regex('s*');
+  var low = parser.regex('l*');
+
   var octaveUp  = parser.regex("\\^*");
   var octaveDown = parser.regex("\\_*");
+
   var durationDouble = parser.regex("\\+*");
   var durationHalve = parser.regex("\\-*");
+
   var dots = parser.regex("\\.*");
   var accent = parser.optional(Parleur.string("!"));
   var staccato = parser.optional(Parleur.string("*"));
   var slur = parser.optional(Parleur.string("~"));
+
   var endWhitespace = whiteAndBarline(parser);
 
   if (parser.success()) {
@@ -87,5 +135,3 @@ function note(parser) {
   parser.refail(parser.expected('note'));
   return undefined;
 }
-
-module.exports.parsePlainMusic = parsePlainMusic;
