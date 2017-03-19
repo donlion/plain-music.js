@@ -1,21 +1,17 @@
 import gulp from 'gulp';
 import del from 'del';
 import runSequence from 'run-sequence';
-import babel from 'gulp-babel';
-import concat from 'gulp-concat';
-import uglify from 'gulp-uglify';
+import babel from 'rollup-plugin-babel';
+import {rollup} from 'rollup';
+import file from 'gulp-file';
+
+const MODULE_NAME = 'myModule';
 
 /**
  * @name SRC
  * @type {string}
  */
 const SRC = './src/**/*.js';
-
-/**
- * @name SCRIPTS_STREAM
- * @constructor
- */
-const SCRIPTS_STREAM = () => gulp.src(SRC).pipe(babel());
 
 /**
  * @name DIST
@@ -34,18 +30,28 @@ gulp.task('clean', cb => {
  * @name scripts
  */
 gulp.task('scripts', () => {
-    return SCRIPTS_STREAM()
-        .pipe(gulp.dest(DIST));
-});
-
-/**
- * @name scripts:dist
- */
-gulp.task('scripts:dist', () => {
-    return SCRIPTS_STREAM()
-        .pipe(concat('index.js'))
-        .pipe(uglify())
-        .pipe(gulp.dest(DIST));
+    return rollup({
+            entry: './src/index.js',
+            plugins: [
+                babel({
+                    presets: [
+                        [
+                            "es2015",
+                            {
+                                modules: false
+                            }
+                        ]
+                    ],
+                    "babelrc": false
+                })
+            ]
+        })
+        .then(bundle => bundle.generate({
+            format: 'umd',
+            moduleName: MODULE_NAME
+        }))
+        .then(bundle => file('index.js', bundle.code, {src: true})
+            .pipe(gulp.dest(DIST)));
 });
 
 /**
@@ -64,5 +70,5 @@ gulp.task('dev', ['build'], () => gulp.watch(SRC, ['scripts']));
  * @name dist
  */
 gulp.task('dist', cb => {
-    return runSequence('clean', ['scripts', 'scripts:dist'], cb);
+    return runSequence('clean', ['scripts'], cb);
 });
