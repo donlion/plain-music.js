@@ -21,7 +21,7 @@ publish: distributable
 	npm publish
 
 test:
-	./node_modules/mocha/bin/mocha "test/*.js"
+	./node_modules/mocha/bin/mocha "./src/**/*.test.js" -u tdd --reporter spec --compilers js:babel-core/register
 
 clean:
 	rm -rf dist
