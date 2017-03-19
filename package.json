@@ -35,6 +35,9 @@
     "gulp-rollup": "^2.11.0",
     "rollup": "^0.41.6",
     "rollup-plugin-babel": "^2.7.1",
-    "run-sequence": "^1.2.2"
+    "run-sequence": "^1.2.2",
+    "mocha": "^3.2.0",
+    "parleur-js": "^1.0.0",
+    "webpack": "^2.2.1"
   }
 }
