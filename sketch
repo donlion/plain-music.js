@@ -1,0 +1,8 @@
+#!/usr/bin/env node
+var pm = require("./src/index.js");
+
+var result = pm.parsePlainMusic("c");
+console.log(result);
+
+var result = pm.parsePlainMusic("{ c d e }");
+console.log(result);
