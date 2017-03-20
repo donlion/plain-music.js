@@ -1,0 +1,20 @@
+#!/usr/bin/env node
+var util = require('util')
+var pm = require("./src/index.js");
+var repl = require("repl")
+
+
+function show(obj, depth) {
+  console.log(util.inspect(result, {depth: depth}));
+}
+
+var r = repl.start("node> ")
+r.context.pm = pm;
+r.context.show = show;
+
+var result = pm.parseFile("{{c d e} {c d e}}");
+
+if (result.error == undefined) {
+  r.context.stave = result.value;
+  show(r.context.stave, 5);
+}
